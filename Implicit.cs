@@ -1,0 +1,16 @@
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using System.ComponentModel.DataAnnotations;
+global using System.ComponentModel.DataAnnotations.Schema;
+global using System.Text.Json.Serialization;
+global using Models;
+global using Microsoft.AspNetCore.Identity;
+global using AutoMapper;
+global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+global using System.Security.Claims;
+global using Microsoft.AspNetCore.Authentication;
+global using MimeKit;
+global using MailKit.Net.Smtp;
+global using EmailService;
+global using Newtonsoft.Json.Linq;

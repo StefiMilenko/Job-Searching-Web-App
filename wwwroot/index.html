@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jobama</title>
+    <script src="vueStart.js"></script>
+    <script src="mojeMetode.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet"
+        href="https://unpkg.com/@geoapify/leaflet-address-search-plugin@^1/dist/L.Control.GeoapifyAddressSearch.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+
+    <script
+        src=" https://cdn.jsdelivr.net/npm/vue-slider-component@3.2.24/dist/vue-slider-component.umd.min.js "></script>
+    <link href=" https://cdn.jsdelivr.net/npm/vue-slider-component@3.2.24/theme/default.min.css " rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="stil.css" rel="stylesheet">
+
+    <script src="https://unpkg.com/vue-star-rating@1.7.0/dist/VueStarRating.umd.min.js"></script>
+    <script src="comment.vue.js"></script>
+    <script src="ocena2.vue.js"></script>
+    <script src="header.vue.js"></script>
+
+</head>
+
+<body>
+    <v-app id="app" style="padding: 0; width: 100%;">
+
+        <app-header>
+        </app-header>
+        <div class="row pt-2"> <!--style="border-bottom: 1px dotted black;">-->
+
+
+            <v-container style="border: 1px solid black; height: fit-content; border-radius: 10px; max-width: 1000px; margin-top: 30px;">
+                <div class="my-3">
+
+
+                    <div class="d-flex justify-content-between align-items-center filterRow"
+                        style="transform: translateY(-10px); margin-bottom: 5px;">
+                        <input type="text" class="form-control" placeholder="Search..." v-model="search">
+                        <button class="btn btn-outline-info" type="submit" onclick="reqJobs()">Pretraži</button>
+                        <button id="moreFiltersBtn" class="more-filters-btn">Prikaži Filtere</button>
+                    </div>
+                    
+
+                <div id="filterContainer" @click.self @click.stop style= "display: none;">
+                    <div class="d-flex justify-content-between align-items-center filterRow">
+
+
+
+                        <v-combobox :search-input.sync="nazivPosla" :items="jobTitles" label="Uloga" outlined dense></v-combobox>
+
+
+                        <v-select v-model="vrstaPosla" :items="['Any','Internship','Junior','Senior']" dense outlined
+                            label="Iskustvo"></v-select>
+
+
+                        <v-select v-model="tipPosla" :items="['Any','Part Time','Full Time']" dense outlined
+                            label="Trajanje Posla"></v-select>
+
+                        <v-combobox :search-input.sync="nazivPoslodavca" :items="companies" label="Kompanija" outlined
+                            dense></v-combobox>
+
+
+
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center my-3 filterRow">
+
+                        <v-combobox :search-input.sync="industrija" :items="industrije" label="Industrija" outlined
+                            dense></v-combobox>
+
+                        <v-combobox :search-input.sync="sektorRada" :items="sektori" label="Sektor industrije" outlined
+                            dense></v-combobox>
+
+
+
+                        <div class="fg6" style="flex-basis: 30%; align-self: flex-start;">
+                            <label> &nbsp; &nbsp; &nbsp; Plata: <a v-if="plataOd==0 && plataDo==500000"
+                                    style="font-weight: 550; font-size: larger; line-height: 20px;">Bilo koja</a> <a
+                                    v-else-if="plataOd==0 && plataDo==0"
+                                    style="font-weight: 550; font-size: larger; line-height: 20px;">Neplaceno</a> <a
+                                    v-else onclick="window.vApp;">od {{plataOd}} do {{plataDo}}</a></label>
+                            <vue-slider style="padding-left:15px;padding-right:15px;" v-model="salaryRange" :min="0"
+                                :max="500000" :interval="500"></vue-slider>
+                        </div>
+
+                        <v-select v-model="plataValuta" style="width: 150px;" :items="['Any','USD','EUR','RSD']" dense
+                            outlined label="Valuta"></v-select>
+                        <!--
+                    <div class="flex-grow-1 mr-5">
+                        <label>Sector:</label>
+                        <input type="text" v-model="sektorRada" class="form-control">
+                    </div>
+                    <div class="fg1 mr-5">
+                        <label>Industry:</label>
+                        <input type="text" v-model="industrija" class="form-control">
+                    </div>
+                    <div class="fg1 mr-5">
+                        <label>Currency:</label>
+                        <select v-model="plataValuta" class="form-control">
+                            <option value="">Select Currency</option>
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="RSD">RSD</option>
+                            <option value="GBP">GBP</option>
+                        </select>
+                    </div>
+                    -->
+                    </div>
+                </div>
+                </div>
+
+
+                <!--
+                <div class="d-flex justify-content-end my-3">
+                    <button class="btn btn-secondary" @click="showMap = !showMap; window.refreshMap();">Toggle Map</button>
+                </div>
+                -->
+
+
+
+                <v-expansion-panels>
+                    <v-expansion-panel flat style="width: 100%;" @change="window.refreshMap();">
+
+                        <div
+                            style="display: inline-flex; width: calc( 100% - 150px ); flex-direction: row; justify-content: space-between;">
+                            <v-combobox :search-input.sync="lokacija"  @keyup="window.locationInputChanged"
+                                :items="locationSuggestions" @change="window.locationInputChanged" label="Lokacija" outlined dense></v-combobox>
+
+
+
+                            <div class="fg2" style="flex-basis: 30%; align-self: flex-start;">
+                                <label> &nbsp; &nbsp; &nbsp; Max Razdaljina: <a v-if="enteredDistance==0"
+                                        style="font-weight: 550; font-size: larger; line-height: 20px;">Remote (od kuce)</a> 
+                                        <a v-else-if="enteredDistance==2000"
+                                        style="font-weight: 550; font-size: larger; line-height: 20px;">Bilo gde</a>
+                                        <a v-else onclick="window.vApp.enteredDistance=0;">{{enteredDistance}} km</a>
+                                    </label>
+                                <vue-slider @change="window.mapCircle()" style="padding-left:15px;padding-right:15px;"
+                                    v-model="enteredDistance" :max="2000" :interval="10"></vue-slider>
+                            </div>
+
+                        </div>
+                        <v-expansion-panel-header style="max-width: 140px !important; display: inline-block; font-weight: 450; border: 1px solid grey; padding: 10px; border-radius: 4px;">
+                            Mapa
+                            <template v-slot:actions>
+                                <v-icon color="primary">
+                                    $expand
+                                </v-icon>
+                            </template>
+                        </v-expansion-panel-header>
+
+
+                        <v-expansion-panel-content eager style="padding: 6px; padding-bottom: 0;">
+                            <div id="map" v-show="showMap" style="width: 100%; height: 55vh;  border: 1px solid black;">
+                                <div id="realMap" style="width: 100%; height: 100%;"></div>
+                            </div>
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
+                </v-expansion-panels>
+
+            </v-container>
+        </div>
+
+
+        <div class="row container col-12" style="max-width: 1300px; margin-left: auto; margin-right: auto;  margin-top: 30px;">
+
+            <!--------------------- Lista poslova --------------------------->
+
+            <div :key="jobListRef" class="col-3" style="background-color: #FAFAFA; border: 1px solid grey;">
+                <div id="posloviHolder" class="col-4" style="text-align: center; background-color: rgb(235, 235, 235); border-bottom: 1px solid grey; height: 20px; line-height: 1; padding: 0; width: 100% !important;margin: -12px;margin-bottom: 12px;min-width: calc(100% + 24px);">
+                    &nbsp;{{jobs.length}} rezultata&nbsp;</div>
+                
+                <div class="card my-2 job-card" v-for="job in jobs" :key="job.id" @click="selectNewJob(job)">
+                    <div class="card-body" :class="{selectedJob: (job==selectedJob)}" style="border: 1px solid grey; border-radius: 4px; padding: 8px; line-height: 10px;">
+                        <h5 class="card-title">{{ job.naziv }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ getPoslodavacName(job.poslodavac) }}</h6>
+                        <p class="card-text">Location: {{ job.lokacija }}</p>
+                        <p class="card-text">Experience: {{ job.vrstaPosla }}</p>
+                        <p class="card-text">Salary: {{ job.plataOd }}-{{ job.plataDo }} {{ job.plataValuta }} {{
+                            job.plataInfo }}</p>
+                        <p v-if="job.sektorRada" class="card-text">Sector: {{ job.sektorRada }}</p>
+                        <p v-if="job.industrija" class="card-text">Industry: {{ job.industrija }}</p>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!--------------------- Izabrani poso --------------------------->
+            
+            <div class="col-9" v-if="selectedJob">
+                <div class="card my-2">
+                    <div class="card-body">
+                        <div style="display:flex;justify-content:space-between;">
+                            <h4 class="card-title">{{ selectedJob.naziv }} </h4>
+                            <h5 style="color: grey;">{{ selectedJob.lokacija }}</h5>
+                        </div>
+                        <h6 class="card-subtitle mb-2 text-muted"> <a :href="'/profile.html?id='+selectedJob.poslodavac.id">{{ getPoslodavacName(selectedJob.poslodavac) }}</a></h6>
+                    
+                        <a>Experience: {{ selectedJob.vrstaPosla }}&nbsp;&nbsp;&nbsp; Salary: <h6
+                                style="display: inline;">{{ selectedJob.plataOd }}-{{ selectedJob.plataDo }} {{
+                                selectedJob.plataValuta }} {{ selectedJob.plataInfo }}</h6></a>
+                        <p v-if="selectedJob.sektorRada" class="card-text">Sector: {{ selectedJob.sektorRada }}</p>
+                        <p v-if="selectedJob.industrija" class="card-text">Industry: {{ selectedJob.industrija }}</p>
+                        <div class="mt-3 separatorH"></div>
+                        <p class="mt-3 card-text">{{ selectedJob.opisPosla }}</p>
+                    </div>
+                </div>
+            
+                <v-divider></v-divider>
+                <div style="display: flex; flex-direction: row; gap: 20px;">
+                    <div  style="flex-grow:2">
+                        <!--------------------- Komentari --------------------------->
+                        <div class="comment-section mt-4">
+                            <textarea class="form-control" v-model="newComment" maxlength="512" rows="4"
+                                v-if="canComment"></textarea>
+                            <button class="btn btn-primary mt-2" @click="addComment" v-if="canComment">Postavi Komentar</button>
+        
+                            <div class="mt-4" v-for="(comment, index) in comments" :key="index">
+                                <comment-card :user="loggedInUser" :comment="comment" @expand-com="expandCom($event)"
+                                    @izmeni-com="izmeniCom($event)" @obrisi-com="obrisiCom($event)"
+                                    @toggle-reply="toggleReplyBox($event)" @add-reply="addReply($event)"
+                                    @cancel-reply="cancelReply($event)"></comment-card>
+        
+                            </div>
+                        </div>
+                    </div>
+
+                <!--------------------- Ocene --------------------------->
+                    <div style="flex-grow:1">
+                <p class="mt-3 card-text" v-if="avgOcena>0">Prosecna ocena posla: {{ avgOcena }}</p>
+                <div v-if="canComment" class="comment-section mt-4 card">
+                    <div class="card-body">
+
+                    <div>
+                    <label>Plata&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;</label><star-rating :inline="true" :star-size="30" v-model="newOcena_1"></star-rating>
+                </div>
+                <div>
+                    <label>Okruzenje&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;</label><star-rating :inline="true" :star-size="30" v-model="newOcena_2"></star-rating>
+                </div>
+                <div>
+                    <label>Napredovanje&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;</label><star-rating :inline="true" :star-size="30" v-model="newOcena_3"></star-rating>
+                </div>
+                <div>
+                    <label>Balans poso-zivot&nbsp; &nbsp;</label><star-rating :inline="true" :star-size="30" v-model="newOcena_4"></star-rating>
+                </div>
+                <!--
+                    <label>Kratak opis:&nbsp; &nbsp;</label>
+                    <textarea class="form-control" v-model="newOcena" maxlength="512" rows="4"
+                        v-if="canComment"></textarea>
+                -->
+                <button class="btn btn-primary mt-2" @click="addOcena" v-if="canComment">{{  mojaOcena==null?"Postavi ocenu":"Izmeni ocenu" }}</button>
+            </div>
+            </div>
+                    <v-divider></v-divider>
+                    <div class="comment-section mt-4 card">
+                
+                    <div class="mt-4" v-for="(ocena, index) in sveOcene">
+                        <ocena-card :user="loggedInUser" :ocena="ocena"
+                            @izmeni-ocena="izmeniOcena($event)" 
+                            @obrisi-ocena="obrisiOcena($event)">
+                        </ocena-card>
+                    </div>
+                
+                </div>
+                </div>
+                
+        </div>
+
+            </div>
+            <div class="col-8" style="padding-bottom: 70px; padding-top: 170px;text-align: center;font-size:30px;color:grey;" v-else>Izaberite posao.</div>
+        </div>
+    </v-app>
+
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script
+        src="https://unpkg.com/@geoapify/leaflet-address-search-plugin@^1/dist/L.Control.GeoapifyAddressSearch.min.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <script src="mapscript.js"></script>
+
+    <script src="search.js"></script>
+    <script src="loggedInUser.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" rel="stylesheet">
+
+</body>
+
+</html>

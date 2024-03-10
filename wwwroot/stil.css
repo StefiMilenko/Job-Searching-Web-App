@@ -1,0 +1,123 @@
+
+.separatorH {
+    border-top: 2px dashed rgba(0, 0, 0, 0.2); height: 2px; width: 100%;
+}
+
+.more-filters-btn {
+    transition: all 0.5s ease-in-out;
+    white-space: nowrap;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 5px;
+    height: 30px;
+    width: 150px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-sizing: content-box;
+  }
+
+.filter-container {
+    display: none;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+
+.fg1{ flex-grow: 1; }
+.fg2{ flex-grow: 2; }
+.fg3{ flex-grow: 3; }
+.fg4{ flex-grow: 4; }
+.fg5{ flex-grow: 5; }
+.fg6{ flex-grow: 6; }
+.fx{display: flex;}
+
+.v-text-field__details{display: none;}
+.selectedJob{
+    background-color: #fafaff;
+    box-shadow: inset 5px 0 7px -5px #8a8fc9, inset -5px 0 7px -5px #d0d3f5;
+}
+
+.profileBadge{
+    padding: 15px;
+    min-width: 180px;
+    color: white;
+}
+.v-label{
+    transform: translateY(-4px);
+    font-weight: 505;
+    color: rgba(0, 0, 0, 0.45) !important;
+    font-size: larger !important;
+    overflow: visible !important;
+}
+.v-expansion-panel-content__wrap{
+    padding: 0px !important;
+}
+.v-expansion-panel-header__icon{
+    margin-left: 0 !important;
+}
+.v-label--active{
+    transform: translateY(-21px) scale(.8) !important;
+    background-color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    overflow: visible;
+    font-size: larger !important;
+    transition: transform 0.1s !important;
+    color: rgba(0, 0, 0, 0.55) !important;
+    font-weight: 550;
+}
+.map-label {
+    transform: translate(-50%, -100%);
+    background-color: rgba(255,255,255,0.5);
+}
+nav button{
+    color:white !important;
+}
+.dispNone{
+    display: none;
+}
+        #app {
+            padding: 1em;
+        }
+        .job-card {
+            cursor: pointer;
+        }
+        .map-container {
+            height: 50%;
+            width: 100%;
+        }
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+        #app {
+            width: 80%;
+        }
+        .filterRow{
+            gap:15px;
+        }
+
+
+        /* comments */
+        .clpsBtn{
+            position: absolute;
+            top:0px;
+            left:0px;
+            padding: 0px;
+            width: 20px; height: 20px;
+            opacity: 0.2;
+            border:none;
+            transition: all 0.5s ease-in-out;
+            background-color: transparent;
+            border-radius: 7px;
+        }
+        .clpsBtn:hover {
+            opacity: 0.8;
+            background-color: #DFDFDF;
+        }
+        .clpsBtn>span{
+            top: -4px;
+            position: relative;
+        }
+        .card-body.ng-isolate-scope{padding: 0px;}
+        .comBdy{position: relative;}

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Jobama Login/Register</title>
+    <script src="./mojeMetode.js"></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+
+    <link href="stil.css" rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+      body,html {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background: url('https://image.cnbcfm.com/api/v1/image/107242608-1684332851346-gettyimages-1490978473-032a3705_dh5e1lcs.jpeg?v=1684408924&w=740&h=416&ffmt=webp&vtcrop=y') no-repeat center center fixed;
+        background-size: cover;
+      }
+
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+
+      .card {
+        background-color: rgba(255, 255, 255, 0.17);  /* semi-transparent white */
+        backdrop-filter: blur(22px);
+        border: 2px double white;
+        border-radius: 6px;
+        padding: 15px;
+      }
+      .cardInner{
+        background-color: rgba(255, 255, 255, 0.6);  /* semi-transparent white */
+        border: 1px double white;
+        border-radius: 6px;
+        padding: 15px;
+        box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2);
+      }
+      /*
+      .myForm{
+          margin: auto;
+      }*/
+
+      .btn-block {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .btn-primary, .btn-light {
+        min-width: 80%;
+        border: 1px solid #8F8F8F !important;
+      }
+      .btn-primary, .btn-info {
+        min-width: 80%;
+      }
+      .uloga{
+        text-align: center; width: 100%; display: flex;
+        margin-bottom: 10px;
+      }
+      .uloga>.L{
+        border-right: none;
+      }
+      .uloga>.R{
+        border-left: none;
+      }
+      .uloga > .btn{
+        min-width: 0;
+        transition: flex-grow 0.1s ease-in;
+      }
+      .uloga>.btn-info{
+        flex-grow: 4;
+        border: 2px solid rgba(0, 0, 0, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" class="container">
+      <div style="min-width: min(100%, 450px);">
+        
+        <div class="card">
+          <div class="cardInner">
+
+            <div class="card-body" style="padding: 0;">
+              <h5 class="card-title text-center" style="margin-bottom: 10px;">{{isAdminForm?'Administrator ':''}} {{ isLoginForm ? 'Login' : 'Register' }}</h5>
+              <form @submit.prevent="submitForm">
+                
+                <div class="form-group fx" v-if="!isLoginForm" style="gap: 5px;">
+                  <div class="fg1">
+                    <label>Ime*</label>
+                  <input type="text" class="form-control" v-model="form.ime" required>
+                  </div>
+                  <div class="fg1">
+                    <label>Prezime*</label>
+                    <input type="text" class="form-control" v-model="form.prezime" required>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label>Email address*</label>
+                  <input type="email" class="form-control" v-model="form.email" required>
+                </div>
+                
+                <div class="form-group fx" style="gap: 5px;">
+                  <div class="fg1">
+                    <label>Password*</label>
+                    <input type="password" class="form-control" v-model="form.password" required>
+                  </div>
+                  <div class="fg1" v-if="!isLoginForm">
+                    <label>Confirm Password*</label>
+                    <input type="password" class="form-control" v-model="form.confirmPassword" required>
+                  </div>
+                </div>
+                
+                <div class="uloga form-group mt-4" v-if="!isLoginForm">
+                  <button type="button" class="btn fg1 L" :class="form.uloga === 0 ? 'btn-info' : 'btn-light'" @click="form.uloga = 0">Trazilac</button>
+                  <button type="button" class="btn fg1 R" :class="form.uloga === 1 ? 'btn-info' : 'btn-light'" @click="form.uloga = 1">Poslodavac</button>
+                </div>
+
+                <div class="form-group" v-if="!isLoginForm && form.uloga === 0">
+
+                  <div class="form-group">
+                    <label>CV</label>
+                    <input type="text" class="form-control" v-model="form.cv">
+                  </div>
+                  <div class="form-group">
+                    <label>Strucna Sprema</label>
+                    <input type="text" class="form-control" v-model="form.strucnaSprema">
+                  </div>
+              </div>
+              <div class="form-group" v-if="!isLoginForm && form.uloga === 1">
+                  <div class="form-group">
+                    <label>Naziv Firme</label>
+                    <input type="text" class="form-control" v-model="form.nazivFirme">
+                  </div>
+                  <div class="form-group">
+                    <label>Opis Firme</label>
+                    <input type="text" class="form-control" v-model="form.opis">
+                  </div>
+              </div>
+                
+                <div class="form-check" v-if="isLoginForm">
+                  <input class="form-check-input" type="checkbox" v-model="form.rememberMe">
+                  <label class="form-check-label">Remember me</label>
+                </div>
+
+                <div class="mt-4 mb-2 separatorH"></div>
+
+                <div class="form-group mt-4 btn-block">
+                  <button type="submit" class="btn btn-primary">{{ isLoginForm ? 'Login' : 'Register' }}</button>
+                </div>
+                <div class="form-group mt-3 btn-block">
+                  <button type="button" class="btn btn-light" @click="isLoginForm = !isLoginForm">Switch to {{ isLoginForm ? 'Registration Form' : 'Login Form' }}</button>
+                </div>
+                <div class="form-group mt-3 btn-block">
+                  <div class="g_id_signin" data-callback="handleGoogleLogin"></div>
+                </div>
+
+              </form>
+            </div>
+            
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    <script>
+new Vue({
+  el: '#app',
+  data: {
+    isLoginForm: true,
+    isAdminForm: urlQuery()["admin"]!=null,
+    form: {
+      ime: '',
+      prezime: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      uloga: 0,
+      rememberMe: false,
+      cv: "",
+      strucnaSprema: "",
+      nazivFirme: "",
+      opis: "",
+      biografija:""
+    }
+  },
+  methods: {
+    request(path, payload) {
+
+        console.log(baseUrl());
+        window.myReq = {payload:payload,resp:null};
+        Req("POST",path).json(payload).onDone((r)=>{
+          window.myReq.resp = r; remoteLog(window.myReq);
+
+          console.log(JSON.stringify(r));  
+
+          if(r.status != 200){
+            alert("Error:\n"+r.rt);
+          }
+          if(r.status == 200){
+            if(this.isLoginForm==false)
+              alert("Uspesna registracija, potvrdite e-mail !");
+            else window.location.href = baseUrl();
+          }
+
+        }).send();
+    },
+    login() {
+      const url = '/Account/Login';
+      const payload = {
+        email: this.form.email,
+        password: this.form.password,
+        rememberMe: this.form.rememberMe
+      };
+      this.request(url, payload);
+    },
+    register() {
+      const url = '/Account/Register';
+      const payload = {
+        ime: this.form.ime,
+        prezime: this.form.prezime,
+        email: this.form.email,
+        password: this.form.password,
+        confirmPassword: this.form.confirmPassword,
+        uloga: this.form.uloga,
+        biografija: this.form.biografija,
+
+        cv: this.form.cv,
+        strucnaSprema: this.form.strucnaSprema,
+        nazivFirme: this.form.nazivFirme,
+        opis: this.form.opis
+      };
+      this.request(url, payload);
+    },
+    submitForm() {
+      this.isLoginForm ? this.login() : this.register();
+    }
+  }
+});
+
+    </script>
+    <script>
+        window.onload = function() {
+            google.accounts.id.initialize({
+                client_id: "YOUR_GOOGLE_CLIENT_ID",
+                callback: ()=>{}//handleGoogleLogin
+            });
+            
+            google.accounts.id.renderButton(
+                document.getElementsByClassName("g_id_signin")[0],
+                { theme: "outline", size: "large" }
+            );
+        };
+    </script>
+</body>
+</html>

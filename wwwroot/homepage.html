@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
+
+    <script src="mojeMetode.js"></script>
+    <script>window.vueStart = {
+
+            data: {
+                isEditing: false,
+                originalProfile: null,  // Neizmenjen profil
+                profile: null,
+
+                loggedInUser: null,
+                jobs: [],
+
+                refresh: 0
+            },
+            computed: {
+
+                window: () => window,
+/*
+                loggedInUser: {
+                    cache:false,
+                    get:function(){
+                    
+                        //return {ime:"Luka",prezime:"Bobanovic"};
+                        return window.loggedInUser;
+                    
+                    },
+                },
+                */
+            },
+    };</script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <link href="stil.css" rel="stylesheet">
+
+    <script src="header.vue.js"></script>
+
+    <title>Jobama Početna</title>
+</head>
+<body>
+  <v-app id="app" style="margin:0; padding:0;">
+    <div class="container-fluid bg-primary bg-gradient" style="margin: 0px;padding: 15px; font-size: 75px; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: gainsboro;">
+        Jobama&#8482;
+    </div>
+
+    <app-header></app-header>
+
+      <div data-bs-spy="scroll" data-bs-target="#navbar-main" data-bs-offset="0" class="scrollspy-example" tabindex="0" style="margin: auto; margin-top: 70px; max-width: 70%; justify-content: left;">
+        <div class="row">
+          <div class="col-6"><div class="jumbotron" style="padding-bottom: 10%; padding-left: 5%;">
+            <h1 id="scrollspyHome" class="display-1" style="padding-bottom: 10%;">Jobama</h1>
+            <p class="lead">Pronađite posao brzo i lako ili se povežite sa vašim budućim zaposlenima</p>
+            <hr class="my-4">
+            <p class="display-7 border-bottom">Pronađite vaš budući posao</p>
+            <p class="lead">
+              <a class="btn btn-success btn-lg" href="./" role="button">Pronađite posao</a>
+              </p>
+            <p class="display-7 border-bottom">Napravite nalog još danas</p>
+            <p class="lead">
+            <a class="btn btn-primary btn-lg" href="./login.html" role="button">Napravi nalog</a>
+            </p>
+        </div>
+      </div>
+          <div class="col-5"><img src="assets/goodpeople.webp" width="540px" height="360px" alt="nasi dobri ljudi"></div>
+        </div>
+        
+          
+        <div class="jumbotron" style="padding-bottom: 5%;">
+          <div class="container" style="justify-self: left;">
+            <h2 id="scrollspyAboutUs" class="display-5">O nama</h2>
+            <p class="lead">Dobrodošli na "Jobama" - tvoj izvor za pronalaženje poslova!</p>
+            <p class="lead">Mi smo online platforma koja je osmišljena kako bi vam pomogla da pronađete idealan posao i ostvarite svoje profesionalne ciljeve. Naša misija je povezati talentovane pojedince s poslodavcima koji traže njihove veštine i stručnost.</p>
+            <p class="lead">U "Jobama" razumemo koliko je pronalaženje posla važno za svakog pojedinca. Svesni smo izazova s kojima se suočavate u današnjem dinamičnom tržištu rada. Zbog toga smo stvorili intuitivnu i jednostavnu platformu koja će vam omogućiti da efikasno istražujete, pregledate i prijavite se na poslove koji odgovaraju vašim interesima i veštinama.</p>
+            <p class="lead">Šta nas izdvaja od drugih platformi za zapošljavanje? Naša pretraga pruža mogućnost prikaza poslova na mapi tako da možete gde se nalazi i koliko je udaljeno vaše buduće radno mesto.</p>
+            <p class="lead">Kao član "Jobama" zajednice, možete kreirati svoj profesionalni profil i istaknuti svoje veštine, obrazovanje i iskustvo. Takođe će te dobijati notifikacije kako bi u svakom trenutku ostali u toku.</p>
+            <p class="lead">Mi smo posvećeni tome da vam pružimo najbolje moguće iskustvo u potrazi za poslom. Verujemo da svi zaslužuju priliku da ostvare svoje profesionalne snove i stoga smo posvećeni pružanju podrške tokom čitavog procesa zapošljavanja.</p>
+          </div>
+        </div>
+      </div>
+
+      </v-app>
+      <footer class="bg-secondary bg-gradient" style="padding-bottom: 5%; justify-self: left;">
+        
+        <div class="jumbotron jumbotron-fluid">
+          <div class="container" style="justify-self: left;">
+            <h2 id="scrollspyContactUs" class="display-5">Kontaktirajte nas</h2>
+            <p class="lead">Možete nas kontaktirati putem e-pošte ili preko telefona.</p>
+          </div>
+        </div>
+          <div class="container">
+            <div class="row">
+              <div class="col-sm">
+                Email: jobamatm@gmail.com
+              </div>
+              <div class="col-sm">
+                Broj telefona: 123 456
+              </div>
+              <div class="col-sm">
+                Adresa kancelarije: Elektronski Fakultet :)
+              </div>
+            </div>
+          </div>
+        
+        <p></p>
+      </footer>
+        <script>
+            window.vApp = new Vue((Object.assign(window.vueStart,{
+                el: '#app',
+            components: {
+              //  VueSlider: window['vue-slider-component'],
+            //    VCombobox: window['v-combobox'],
+                //'comment-card': window.commentComp,
+                'app-header': window.headerComp,
+            },
+    
+                methods: {
+            getPoslodavacName(poslodavac){
+                if(!poslodavac) return "";
+                if(poslodavac.nazivFirme) return poslodavac.nazivFirme;
+                return `${poslodavac.ime+" "+poslodavac.prezime}`;
+            },
+                    upd:function(){
+                        this.refresh++;
+                    },
+                    LogOut(){
+                        logOut('search');
+                    },
+                    save() {
+                        if (this.isEditing) {
+                            this.originalProfile = null;  // Discard the original profile data
+                            let p = (window.loggedInUser.uloga==0)?"Poslodavac/IzmeniPoslodavca":"Trazilac/IzmeniTrazioca";
+                            Req("PUT",p).json(this.profile).onDone(function(r){
+    
+                            }).send();
+                        } else {
+                            this.originalProfile = { ...this.profile };  // Save a copy of the original profile data
+                        }
+                        this.isEditing = !this.isEditing;
+                    },
+                    cancel() {
+                        if (this.originalProfile) {
+                            this.profile = this.originalProfile;  // Reset the profile data
+                            this.originalProfile = null;  // Discard the original profile data
+                        }
+                        this.isEditing = false;
+                    },
+                    openJob(job){
+                        window.location.href=baseUrl()+"?job="+job.id;
+                    }
+                }
+            })));
+    
+    
+    //}
+    
+    function loadProf(user){
+        console.log("LOADPROF ",user)
+        window.vApp.upd();
+        window.vApp.profile = user;
+    
+        if(user.uloga == 1)
+        Req("GET","/Posao/VratiPoslovePoslodavca").query({PoslodavacId:user.id}).onDone(function(r){
+            console.log(r.rt);
+            let o = JSON.parse(r.rt);
+            console.log(o);
+            if(o && o.forEach)
+                window.vApp.jobs = JSON.parse(r.rt);
+        }).send();
+    }
+    
+    
+    
+    let id = urlQuery().id;
+    console.log("ID FROM URL ",id);
+    if(id) reqGetUsrInfo(Number(id),loadProf);
+    else reqAuthToAcc(loadProf);
+    
+    
+    
+    reqAuthToAcc(function(){ 
+        window.vApp.loggedInUser = window.loggedInUser;
+    });
+    
+        </script>
+</body>
+</html>

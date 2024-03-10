@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Profile Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="stil.css" rel="stylesheet">
+    <script src="./mojeMetode.js"></script>
+    <script>window.vueStart = {
+
+            data: {
+                isEditing: false,
+                originalProfile: null,  // Neizmenjen profil
+                profile: null,
+
+                loggedInUser: null,
+                jobs: [],
+
+                refresh: 0
+            },
+            computed: {
+
+                window: () => window,
+/*
+                loggedInUser: {
+                    cache:false,
+                    get:function(){
+                    
+                        //return {ime:"Luka",prezime:"Bobanovic"};
+                        return window.loggedInUser;
+                    
+                    },
+                },
+                */
+            },
+    };</script>
+    <script src="header.vue.js"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f2f2f2;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            padding: 0;
+        }
+        .profile {
+            width: 80%;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            border-radius: 8px;
+            color: #333;
+            margin: auto;
+            margin-top: 4em;
+        }
+        .profileTop{
+            margin-bottom: 20px;
+        }
+        .profile h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .profileInfo p {
+            font-weight: bold;
+            font-size: 1.5em;
+            line-height: 1.6em;
+        }
+        .profile .label {
+            font-size: 17px !important;
+            font-weight: 300;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" style="width: 100%; height:100%; padding: 0;">
+    
+        
+    <app-header>
+    </app-header>
+
+        <div class="profile" v-if="profile">
+            <div class="profileTop" style="display:flex; gap: 15px;">
+                <h1 class="fg1"> {{ profile.uloga === 0 ? 'Trazilac' : 'Poslodavac' }}</h1>
+                <button :key="refresh" v-if="loggedInUser?.id == profile.id" class="btn btn-light" style="height: min-content;" @click="save">{{ isEditing ? 'Save' : 'Edit' }}</button>
+                <button :key="refresh" v-if="!isEditing && loggedInUser && loggedInUser?.id == profile.id" class="btn btn-danger" style="height: min-content;" @click="LogOut">Log out</button>
+                <button class="btn btn-danger" style="height: min-content;" v-if="isEditing" @click="cancel">Cancel</button>
+            </div>
+            <div v-if="isEditing">
+
+                <div class="form-group" style="display: flex; gap:15px;">
+                    <p class="fg1"><span class="label">Ime:</span> <input v-model="profile.ime" class="form-control"></p>
+                    <p class="fg1"><span class="label">Prezime:</span> <input v-model="profile.prezime" class="form-control"></p>
+                </div>
+                    <p><span class="label">Email:</span> <input v-model="profile.email" class="form-control"></p>
+                    <p v-if="profile.uloga === 0"><span class="label">CV:</span> <input v-model="profile.cv" class="form-control"></p>
+                    <p v-if="profile.uloga === 0"><span class="label">Strucna Sprema:</span> <input v-model="profile.strucnaSprema" class="form-control"></p>
+                    <p v-if="profile.uloga === 1"><span class="label">Naziv Firme:</span> <input v-model="profile.nazivFirme" class="form-control"></p>
+                    <p v-if="profile.uloga === 1"><span class="label">Opis:</span> <input v-model="profile.opis" class="form-control"></p>
+                    <div class="form-group">
+                        <label>Biografija</label>
+                        <textarea class="form-control" rows="10" v-model="profile.biografija" required></textarea>
+                      </div>
+                </div>
+            <div class="profileInfo" v-else>
+                <p><span class="label">Ime i Prezime:</span> {{ profile.ime }} {{ profile.prezime }}</p>
+                <p><span class="label">Email:</span> {{ profile.email }}</p>
+                <p v-if="profile.uloga === 0"><span class="label">CV:</span> {{ profile.cv }}</p>
+                <p v-if="profile.uloga === 0"><span class="label">Strucna Sprema:</span> {{ profile.strucnaSprema }}</p>
+                <p v-if="profile.uloga === 1"><span class="label">Naziv Firme:</span> {{ profile.nazivFirme }}</p>
+                <p v-if="profile.uloga === 1"><span class="label">Opis:</span> {{ profile.opis }}</p>
+                <p><span class="label">Biografija:</span></p>
+                <p aria-placeholder="Dodajte biografiju."> {{ profile.biografija }} </p>
+                
+            </div>
+            <div v-if="profile.uloga === 1">
+                <div class="separatorH" style="margin-top:25px;margin-bottom:25px;"></div>
+
+               
+            <div class="card my-2 job-card" v-for="(job, index) in jobs" @click="openJob(job)">
+                <div class="card-body">
+                    <h5 class="card-title">{{ job.naziv }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ getPoslodavacName(job.poslodavac) }}</h6>
+                    <p class="card-text">Location: {{ job.lokacija }}</p>
+                    <p class="card-text">Experience: {{ job.vrstaPosla }}</p>
+                    <p class="card-text">Salary: {{ job.plataOd }}-{{ job.plataDo }} {{ job.plataValuta }} {{ job.plataInfo }}</p>
+                    <p v-if="job.sektorRada" class="card-text">Sector: {{ job.sektorRada }}</p>
+                    <p v-if="job.industrija" class="card-text">Industry: {{ job.industrija }}</p>
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.vApp = new Vue((Object.assign(window.vueStart,{
+            el: '#app',
+        components: {
+          //  VueSlider: window['vue-slider-component'],
+        //    VCombobox: window['v-combobox'],
+            //'comment-card': window.commentComp,
+            'app-header': window.headerComp,
+        },
+
+            methods: {
+        getPoslodavacName(poslodavac){
+            if(!poslodavac) return "";
+            if(poslodavac.nazivFirme) return poslodavac.nazivFirme;
+            return `${poslodavac.ime+" "+poslodavac.prezime}`;
+        },
+                upd:function(){
+                    this.refresh++;
+                },
+                LogOut(){
+                    logOut('search');
+                },
+                save() {
+                    if (this.isEditing) {
+                        this.originalProfile = null;  // Discard the original profile data
+                        let p = (window.loggedInUser.uloga==0)?"Trazilac/IzmeniTrazioca":"Poslodavac/IzmeniPoslodavca";
+                        Req("PUT",p).json(this.profile).onDone(function(r){
+                            console.log("IZMENI", r);
+                        }).send();
+                    } else {
+                        this.originalProfile = { ...this.profile };  // Save a copy of the original profile data
+                    }
+                    this.isEditing = !this.isEditing;
+                },
+                cancel() {
+                    if (this.originalProfile) {
+                        this.profile = this.originalProfile;  // Reset the profile data
+                        this.originalProfile = null;  // Discard the original profile data
+                    }
+                    this.isEditing = false;
+                },
+                openJob(job){
+                    window.location.href=baseUrl()+"?job="+job.id;
+                }
+            }
+        })));
+
+
+//}
+
+function loadProf(user){
+    console.log("LOADPROF ",user)
+    window.vApp.upd();
+    window.vApp.profile = user;
+
+    if(user.uloga == 1)
+    Req("GET","/Posao/VratiPoslovePoslodavca").query({PoslodavacId:user.id}).onDone(function(r){
+        console.log(r.rt);
+        let o = JSON.parse(r.rt);
+        console.log(o);
+        if(o && o.forEach)
+            window.vApp.jobs = JSON.parse(r.rt);
+    }).send();
+}
+
+
+
+let id = urlQuery().id;
+console.log("ID FROM URL ",id);
+if(id) reqGetUsrInfo(Number(id),loadProf);
+else reqAuthToAcc(loadProf);
+
+
+
+reqAuthToAcc(function(){ 
+    window.vApp.loggedInUser = window.loggedInUser;
+});
+
+    </script>
+</body>
+</html>

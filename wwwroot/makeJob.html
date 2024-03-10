@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Create Job</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+
+  <link href="stil.css" rel="stylesheet">
+  <script src="./mojeMetode.js"></script>
+  <script>window.vueStart = {
+
+          data: {
+            
+          },
+          computed: {
+
+              window: () => window,
+
+              loggedInUser: function(){
+                  //cache:false,
+                  //get:function(){
+                    console.log("GET USER ",window.loggedInUser);
+                      //return {ime:"Luka",prezime:"Bobanovic"};
+                      return window.loggedInUser;
+                  
+                  //},
+              },
+              
+          },
+  };</script>
+  <script src="header.vue.js"></script>
+  </head>
+
+
+
+<body>
+
+  <v-app id="jobApp">
+
+    <app-header>
+    </app-header>
+  
+  
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-8">
+          <div class="border-bottom" style="margin-bottom: 2%; margin-top: 5%;">
+            <h2 class="display-1">Napravi posao</h2>
+          </div>
+
+          <form @submit.prevent="submitForm">
+            
+            <div class="form-group" style="display: flex; gap:15px;">
+            <div class="fg1">
+              <label>Naziv</label>
+              <input type="text" class="form-control" v-model="job.naziv" required>
+            </div>
+            <div class="fg1">
+              <label>Lokacija</label>
+              <input type="text" class="form-control" v-model="job.lokacija" required>
+            </div>
+          </div>
+            <div class="form-group" style="display: flex; gap:15px; margin-top: 10px;">
+              <div class="fg1">
+                <label>Plata Od</label>
+                <input type="number" class="form-control" v-model="job.plataOd" required>
+              </div>
+              <div class="fg1">
+                <label>Plata Do</label>
+                <input type="number" class="form-control" v-model="job.plataDo" required>
+              </div>
+              <div class="fg1">
+                  <label>Plata Valuta</label>
+                  
+    <v-select  v-model="job.plataValuta" required
+    :items="['USD','EUR','RSD']"
+    dense outlined
+    label=""
+  ></v-select>
+<!--                  <select class="form-control" v-model="job.plataValuta" required>
+                      <option value="">Select Currency</option>
+                      <option value="$">$</option>
+                      <option value="EUR">EUR</option>
+                      <option value="RSD">RSD</option>
+                  </select>
+                  -->
+
+              </div>        
+              <!--
+              <div class="fg1">
+                  <label>Plata Info (po satu, dnevno, mesecno..)</label>
+                  <input type="text" class="form-control" v-model="job.plataInfo" required>
+                </div>
+                -->
+          </div>        
+          <div class="form-group" style="display: flex; gap:15px; margin-top: 10px;">
+            <div class="fg1">
+              <label>Industrija</label>
+              <input type="text" class="form-control" v-model="job.industrija" required>
+            </div>
+            <div class="fg1">
+              <label>Sektor Industrije</label>
+              <input type="text" class="form-control" v-model="job.sektorRada" required>
+            </div>
+            </div>
+            <div class="form-group" style="display: flex; gap:15px; margin-top: 10px;">
+              <div class="fg1">
+              <label>Vrsta Posla</label>    
+              <v-select  v-model="job.vrstaPosla" required
+              :items="['Any','Internship','Junior','Senior']"
+              dense outlined
+              label=""
+            ></v-select>
+            </div>
+            <div class="fg1">
+              <label>Trajanje Posla</label>
+              <v-select v-model="job.tipPosla" required :items="['Any','Part Time','Full Time']" dense outlined
+                label=""></v-select>
+              </div>
+            </div>
+            <!--
+              <select class="form-control" v-model="job.vrstaPosla" required>
+                <option value="">Select experience level</option>
+                <option value="Any">Any</option>
+                <option value="Internship">Internship</option>
+                <option value="Junior">Junior</option>
+                <option value="Senior">Senior</option>
+              </select>
+              -->
+            <div class="form-group" style="margin-top: 10px;">
+              <label>Opis Posla</label>
+              <textarea class="form-control" rows="10" v-model="job.opisPosla" required></textarea>
+            </div>
+            
+            <div style="padding: 2%; text-align: center; color:white;">
+              <button type="submit" class="btn btn-primary col-5 display-8 btn-lg" style="margin-left: auto; margin-right: auto;">Postavi posao</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  
+  </v-app>
+<script>
+  new Vue(Object.assign(window.vueStart,{
+    el: '#jobApp',
+    vuetify: new Vuetify(),
+    components: {
+        VueSlider: window['vue-slider-component'],
+    //    VCombobox: window['v-combobox'],
+        'comment-card': window.commentComp,
+        'app-header': window.headerComp,
+    },
+    data: {
+      job: {
+        naziv: '',
+        lokacija: '',
+        plataOd: 0,
+        plataDo: 0,
+        plataValuta: 'EUR',
+        plataInfo: 'mesecno',
+        sektorRada: '',
+        industrija: '',
+        vrstaPosla: 'Any',
+        tipPosla: 'Any',
+        opisPosla: ''
+      }
+    },
+    methods: {
+      submitForm() {
+        Req("POST",'Posao/DodajPosao').json(this.job).onDone((r)=>{
+          
+            //TODO otvori taj posao..  
+          if(r.status != 200){
+            alert("Error:\n"+r.rt);
+          }
+          if(r.status == 200){
+            alert("Dodat posao sa id " +r.rt);
+            window.location.href = baseUrl()+"?job="+r.rt;
+            //console.log(baseUrl()+"?jobId="+r.rt);
+          }
+
+        }).send();
+      }
+    }
+  }));
+  </script>
+</body>
+</html>
